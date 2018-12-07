@@ -16,3 +16,10 @@ for (i in 1:length(import)) {
 text_df<-rownames_to_column(data_frame(import)) #Seitenzahlen als Spalte
 text_df<-unnest(text_df)
 colnames(text_df) <- c("pagenum", "text")
+
+text_df %<>%
+  mutate(odd = seq_len(nrow(text_df)) %% 2) %>%
+  mutate(pagenum = as.numeric(pagenum)) %>%
+  group_by(pagenum) %>%
+  arrange(pagenum, odd) %>%
+  ungroup()
